@@ -1,29 +1,27 @@
 import { useState, useContext } from "react";
 import { Button, Card, Container, Form } from "react-bootstrap";
-import { createUser } from "../services/userService";
+import { getUsers } from "../services/userService";
 import { AuthContext } from "../context/AuthContext";
 import { useNavigate } from "react-router-dom";
 
 
 
-export function Register() {
-    const [nickName, setNickName] = useState("");
-    const [nombre, setNombre] = useState("");
-    const [email, setEmail] = useState("");
-    const [password, setPassword] = useState("");
-    const [toast,setToast] = useState("") 
+export function LoginPage() {
+  const [nickName, setNickName] = useState("");
+  const [password, setPassword] = useState("");
+  const [toast,setToast] = useState("") 
 
   const auth = useContext(AuthContext)
 
   const navigate = useNavigate();
 
-    function mostrarMensaje(mensaje:string){
+  function mostrarMensaje(mensaje:string){
     setToast(mensaje);
     setTimeout(() => {setToast("");}, 2000)
   }
 
-    function validarCampos(){
-        if(!nickName || !nombre || !password || !email){
+  function validarCampos(){
+        if(!nickName || !password){
             mostrarMensaje("Complete todos los campos obligatorios");
             return false
         }
@@ -35,26 +33,38 @@ export function Register() {
     e.preventDefault();
 
     try {
-        
-        if(!validarCampos()) return;
 
-        const newUser = {nickName,nombre,email,password};
+      if(!validarCampos()) return;
+      
+        const users = await getUsers();
 
-        const user = await createUser(newUser);
- 
+        const user = users.find(
+            u => u.nickName === nickName
+        );
+
+        if (!user) {
+            mostrarMensaje("El usuario no existe");
+            return;
+        }
+
+        if (password !== "123456") {
+            mostrarMensaje("Contraseña incorrecta");
+            return;
+        }
         auth?.login(user);
         localStorage.setItem("user", JSON.stringify(user));
         navigate("/");
 
+        console.log(user);
+
     } catch (error) {
-        if(error instanceof Error){
-            mostrarMensaje(error.message)
-        }
-        else{
-            mostrarMensaje("Error al conectar con el servidor");
-        }
+       if(error instanceof Error){
+        mostrarMensaje(error.message);
+       }
+       else{
+        mostrarMensaje("Error al conectar con el servidor")
+       }
         console.error(error);
-        
     }
 };
 
@@ -63,7 +73,7 @@ export function Register() {
       <Card style={{ width: "28rem" }}>
         <Card.Body>
           <Card.Title className="text-center mb-4">
-            Registrate
+            Iniciar sesión
           </Card.Title>
 
           <Form onSubmit={handleSubmit}>
@@ -73,24 +83,6 @@ export function Register() {
                 type="text"
                 value={nickName}
                 onChange={(e) => setNickName(e.target.value)}
-              />
-            </Form.Group>
-
-             <Form.Group className="mb-3">
-              <Form.Label>Nombre</Form.Label>
-              <Form.Control
-                type="text"
-                value={nombre}
-                onChange={(e) => setNombre(e.target.value)}
-              />
-            </Form.Group>
-
-             <Form.Group className="mb-3">
-              <Form.Label>Email</Form.Label>
-              <Form.Control
-                type="text"
-                value={email}
-                onChange={(e) => setEmail(e.target.value)}
               />
             </Form.Group>
 
@@ -105,7 +97,7 @@ export function Register() {
             <p>{toast}</p>
 
             <Button type="submit" className="w-100">
-              Registrarse
+              Iniciar sesión
             </Button>
           </Form>
         </Card.Body>

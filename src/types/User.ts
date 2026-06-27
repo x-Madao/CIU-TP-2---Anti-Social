@@ -5,3 +5,5 @@ export type User = {
   email: string;
   password: string;
 };
+
+export type CreateUserDto = Omit<User, "id">;
