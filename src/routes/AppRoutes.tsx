@@ -5,6 +5,8 @@ import { LoginPage } from '../pages/LoginPage'
 import { Profile } from '../pages/Profile'
 import { Register } from "../pages/Register";
 import { NavbarApp } from "../components/NavbarApp";
+import ProtectedRoute from "../components/ProtectedRoute";
+import {NewPost} from '../pages/NewPost';
 
 function AppRoutes(){
 
@@ -14,10 +16,13 @@ function AppRoutes(){
     <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/login" element={<LoginPage />} />
-        <Route path="/profile" element={<Profile />} />
+        <Route path="/profile" element={<ProtectedRoute><Profile /></ProtectedRoute>} />
         <Route path="/register" element={<Register />} />
-         {/*<Route path="/post/:id" element={<PostDetail />} />
-        <Route path="/new-post" element={<NewPost />} />*/}
+        <Route path="/new-post" element={
+            <ProtectedRoute><NewPost />
+            </ProtectedRoute>} />
+        {/*<Route path="/post/:id" element={<PostDetail />}/> */ }
+        
     </Routes>
     </BrowserRouter>
     )

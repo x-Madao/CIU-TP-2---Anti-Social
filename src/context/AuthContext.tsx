@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { User } from "../types/User";
+import type { User } from "../types/user";
 import { useState } from "react";
 import type { ReactNode } from "react";
 
@@ -23,7 +23,9 @@ export function AuthProvider({ children }: AuthProviderProps) {
 
     
 
-    const login = (user:User) => { setUser(user)}
+    const login = (userData:User) => { setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+    };
     
     const logout = () => { setUser(null); localStorage.removeItem("user"); }
 

@@ -1,9 +1,9 @@
-import type { User, CreateUserDto } from "../types/User";
+import type { User, CreateUserDto } from "../types/user";
 
-const API_URL = "http://localhost:3000";
+const API_URL = "http://localhost:3000/api";
 
 export async function getUsers(): Promise<User[]> {
-  const response = await fetch(`${API_URL}/api/usuarios`);
+  const response = await fetch(`${API_URL}/user`);
 
   if (!response.ok) {
     throw new Error("Error al obtener los usuarios");
@@ -13,7 +13,7 @@ export async function getUsers(): Promise<User[]> {
 }
 
 export async function createUser(user: CreateUserDto): Promise<User> {
-  const response = await fetch(`${API_URL}/api/usuarios`, {
+  const response = await fetch(`${API_URL}/user`, {
     method: "POST",
     headers: {
       "Content-Type": "application/json",
@@ -24,7 +24,7 @@ export async function createUser(user: CreateUserDto): Promise<User> {
   if (!response.ok) {
     const data = await response.json();
     console.log(data)
-    throw new Error(data.error || "No se pudo crear el usuario");
+    throw new Error(data.message || data.error || "No se pudo crear el usuario");
   }
 
   return response.json();

@@ -15,8 +15,7 @@ export function NavbarApp() {
         <Navbar.Brand as={Link} to="/">
           UNAHUR Anti-Social Net
         </Navbar.Brand>
-
-        
+        <Navbar.Toggle aria-controls="navbar" />    
 
         <Navbar.Collapse id="navbar">
 
@@ -31,13 +30,14 @@ export function NavbarApp() {
 
            { auth?.user ? (
             <>
+            <LinkContainer to="/new-post">
+            <Button variant="outline-success" className="me-2">CrearPublicación</Button>
+            </LinkContainer>
             <LinkContainer to="/profile">
             <Button variant="light" className="me-2">Perfil</Button>
             </LinkContainer>
 
-            <LinkContainer to="/" >
-            <Button variant="outline-light" onClick={auth.logout}>Cerrar sesion</Button>
-            </LinkContainer>
+            <Button variant="outline-danger" onClick={auth.logout}>Cerrar sesion</Button>
             </>
             ):(
             <>
