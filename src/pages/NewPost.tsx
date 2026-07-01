@@ -2,7 +2,7 @@ import React, { useState, useEffect, useContext } from "react";
 import { Container, Form, Button, Card, Alert, Spinner, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
-import { getTags } from "../services/tagService";
+import { getTags, createTag } from "../services/tagService";
 import { createPost } from "../services/postService"; 
 import type { Tag } from "../types/Tag";
 
@@ -19,6 +19,8 @@ export function NewPost() {
   const [loadingTags, setLoadingTags] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
+
+  const [newTag, setNewTag] = useState("");
 
   useEffect(() => {
     const fetchTags = async () => {
@@ -39,6 +41,23 @@ export function NewPost() {
       prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]
     );
   };
+
+
+  const handleCreateTag = async () => {
+  if (!newTag.trim()) return;
+
+  try {
+    const tag = await createTag(newTag.trim());
+
+    setAvailableTags((prev) => [...prev, tag]);
+    setSelectedTags((prev) => [...prev, tag._id]);
+
+    setNewTag("");
+  } catch (error) {
+    console.error(error);
+  }
+};
+
 
   
   const handleUrlChange = (index: number, value: string) => {
@@ -73,6 +92,8 @@ export function NewPost() {
       const validImages = imageUrls
         .filter(url => url.trim() !== "")
         .map(url => ({ url: url.trim() }));
+
+        console.log(selectedTags);
 
       await createPost({
         description,
@@ -161,6 +182,31 @@ export function NewPost() {
                       ))}
                     </div>
                   )}
+
+
+                  <Row className="mt-3">
+  <Col>
+    <Form.Control
+      type="text"
+      placeholder="Nueva etiqueta"
+      value={newTag}
+      onChange={(e) => setNewTag(e.target.value)}
+    />
+  </Col>
+
+  <Col xs="auto">
+    <Button
+      variant="outline-primary"
+      onClick={handleCreateTag}
+    >
+      Agregar
+    </Button>
+  </Col>
+</Row>
+
+
+
+
                 </Form.Group>
 
                 <div className="d-grid">

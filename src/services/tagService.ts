@@ -11,3 +11,19 @@ export async function getTags(): Promise<Tag[]> {
 
   return response.json();
 }
+
+export async function createTag(nombre: string): Promise<Tag> {
+  const response = await fetch(`${API_URL}/tag`, {
+    method: "POST",
+    headers: {
+      "Content-Type": "application/json",
+    },
+    body: JSON.stringify({ nombre }),
+  });
+
+  if (!response.ok) {
+    throw new Error("No se pudo crear la etiqueta");
+  }
+
+  return response.json();
+}

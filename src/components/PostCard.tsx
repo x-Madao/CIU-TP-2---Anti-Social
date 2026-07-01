@@ -16,6 +16,8 @@ const ANTI_REACTIONS = [
     { type: 'boo', emoji: '👻', label: 'Abucheo' }
 ];
 export default function PostCard({ post }: PostCardProps) {
+    console.log(post);
+
     const auth = useContext(AuthContext);
     const [currentPost, setCurrentPost] = useState<Post>(post);
     const [isReacting, setIsReacting] = useState(false);
