@@ -124,7 +124,7 @@ export default function PostCard({ post }: PostCardProps) {
 
                     <Link to={`/post/${currentPost._id}`}>
                         <Button variant="outline-primary" size="sm">
-                            Quejarse (Ver comentarios)
+                            Ver comentarios
                         </Button>
                     </Link>
                 </div>
