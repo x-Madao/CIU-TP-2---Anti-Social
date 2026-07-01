@@ -23,7 +23,6 @@ export default function PostCard({ post }: PostCardProps) {
     
     const currentUserId = auth?.user?._id || (auth?.user as any)?.id;
 
-    
     const handleReaction = async (reactionType: string) => {
         if (!currentUserId) {
             alert("Debes iniciar sesión para reaccionar.");
@@ -32,12 +31,14 @@ export default function PostCard({ post }: PostCardProps) {
 
         setIsReacting(true);
         try {
-            
             const response = await reactToPost(currentPost._id, currentUserId, reactionType);
             
-            
             if (response.data) {
-                setCurrentPost(response.data);
+                setCurrentPost((prevPost) => ({
+                    ...response.data,   
+                    user: prevPost.user, 
+                    tags: prevPost.tags  
+                }));
             }
         } catch (error) {
             console.error("Error al reaccionar:", error);
