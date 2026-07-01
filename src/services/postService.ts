@@ -1,4 +1,4 @@
-import type {Post} from '../types/post';
+import type { Post } from "../types/Post";
 
 const API_URL = "http://localhost:3000/api";
 
@@ -54,3 +54,11 @@ export const reactToPost = async (postId: string, userId: string, reactionType: 
 
   return response.json();
 };
+
+export async function getPostById(id:string){
+    const response = await fetch(`${API_URL}/posts/${id}`)
+    if (!response.ok) {
+        throw new Error("Error al obtener la publicacion")
+    }
+    return response.json()
+}

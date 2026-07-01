@@ -1,5 +1,5 @@
 import { createContext } from "react";
-import type { User } from "../types/user";
+import type { User } from "../types/User";
 import { useState } from "react";
 import type { ReactNode } from "react";
 

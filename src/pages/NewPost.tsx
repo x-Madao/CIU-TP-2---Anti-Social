@@ -4,7 +4,7 @@ import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { getTags } from "../services/tagService";
 import { createPost } from "../services/postService"; 
-import type { Tag } from "../types/tag";
+import type { Tag } from "../types/Tag";
 
 export function NewPost() {
   const auth = useContext(AuthContext);

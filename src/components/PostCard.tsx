@@ -3,7 +3,7 @@ import {Card, Badge, Button, ButtonGroup} from 'react-bootstrap';
 import { Link} from 'react-router-dom';
 import {AuthContext} from '../context/AuthContext';
 import { reactToPost} from '../services/postService';
-import type {Post} from '../types/post';
+import type {Post} from '../types/Post';
 
 type PostCardProps = {
     post: Post;

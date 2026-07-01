@@ -8,6 +8,7 @@ import { NavbarApp } from "../components/NavbarApp";
 import ProtectedRoute from "../components/ProtectedRoute";
 import {NewPost} from '../pages/NewPost';
 import {FeedPage} from "../pages/FeedPage";
+import PostDetail from "../pages/PostDetail";
 
 function AppRoutes(){
 
@@ -34,7 +35,7 @@ function AppRoutes(){
             <ProtectedRoute>
                 <NewPost />
             </ProtectedRoute>} />
-        {/*<Route path="/post/:id" element={<PostDetail />}/> */ }
+        <Route path="/post/:id" element={<PostDetail />}/>  
         
     </Routes>
     </BrowserRouter>

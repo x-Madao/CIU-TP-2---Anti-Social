@@ -1,4 +1,4 @@
-import type { User, CreateUserDto } from "../types/user";
+import type { User, CreateUserDto } from "../types/User";
 
 const API_URL = "http://localhost:3000/api";
 

@@ -3,7 +3,7 @@ import { Container, Row, Col, Spinner, Alert, Button } from "react-bootstrap";
 import {Link} from "react-router-dom";
 import { getPosts } from "../services/postService";
 import PostCard from "../components/PostCard";
-import type { Post } from "../types/post";
+import type { Post } from "../types/Post";
 
 export function FeedPage() {
   const [posts, setPosts] = useState<Post[]>([]);

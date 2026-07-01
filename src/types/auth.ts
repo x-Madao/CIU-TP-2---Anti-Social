@@ -1,4 +1,4 @@
-import type {User} from './user';
+import type {User} from './User';
 
 export type AuthContextType = {
     user: User | null;

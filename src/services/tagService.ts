@@ -1,4 +1,4 @@
-import type { Tag } from "../types/tag";
+import type { Tag } from "../types/Tag";
 
 const API_URL = "http://localhost:3000/api";
 

@@ -1,4 +1,4 @@
-import type { Tag } from './tag'; 
+import type { Tag } from './Tag'; 
 
 export type Post = {
   _id: string;
