@@ -1,32 +1,85 @@
-# React + TypeScript + Vite
+# UNAHUR Anti-Social Net
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+## Descripción del proyecto
 
-Currently, two official plugins are available:
+UNAHUR Anti-Social Net es una red social desarrollada como trabajo práctico para la materia Construcción de Interfaces de Usuario.
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+La aplicación permite a los usuarios registrarse, iniciar sesión y acceder a una plataforma donde pueden interactuar mediante publicaciones, comentarios y otras funcionalidades propias de una red social.
 
-## React Compiler
+El proyecto fue desarrollado utilizando React, TypeScript y React Bootstrap para el frontend, consumiendo una API REST para la gestión de usuarios y publicaciones.
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+---
 
-## Expanding the Oxlint configuration
+## Instrucciones para correr el proyecto en local
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+### Requisitos
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
+- Node.js
+- npm
+
+### Instalación
+
+Clonar el repositorio:
+
+```bash
+git clone https://github.com/x-Madao/CIU-TP-2---Anti-Social.git
 ```
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+Ingresar al proyecto:
+
+```bash
+cd CIU\ TP\ 2/
+```
+
+Instalar las dependencias:
+
+```bash
+npm install
+```
+
+Ejecutar la aplicación:
+
+```bash
+npm run dev
+```
+
+La aplicación estará disponible en:
+
+```
+http://localhost:5173
+```
+
+> **Importante:** para que la aplicación funcione correctamente también debe estar ejecutándose la API del backend.
+
+---
+
+## Repositorio del Backend
+
+```
+https://github.com/EP-UnaHur-2026C1/anti-social-documental-tp-nnr.git
+```
+
+## API utilizada
+
+La aplicación consume la siguiente API REST:
+
+```
+http://localhost:3000/api
+```
+
+Principales recursos utilizados:
+
+- `/usuarios`
+- `/posts`
+- `/tags`
+
+---
+
+## Tecnologías utilizadas
+
+- React
+- TypeScript
+- React Router
+- React Bootstrap
+- Bootstrap
+- Fetch API
