@@ -1,5 +1,5 @@
 import {useState, useContext} from 'react';
-import {Card, Badge, Button, ButtonGroup} from 'react-bootstrap';
+import {Card, Badge, Button, ButtonGroup, Modal} from 'react-bootstrap';
 import { Link} from 'react-router-dom';
 import {AuthContext} from '../context/AuthContext';
 import { reactToPost} from '../services/postService';
@@ -21,6 +21,7 @@ export default function PostCard({ post }: PostCardProps) {
     const auth = useContext(AuthContext);
     const [currentPost, setCurrentPost] = useState<Post>(post);
     const [isReacting, setIsReacting] = useState(false);
+    const [selectedImage, setSelectedImage] = useState<string | null>(null);
 
     
     const currentUserId = auth?.user?._id || (auth?.user as any)?.id;
@@ -84,7 +85,8 @@ export default function PostCard({ post }: PostCardProps) {
                                     src={imageUrl}
                                     alt="Imagen adjunta"
                                     className="img-fluid rounded border shadow-sm"
-                                    style={{ maxHeight: '300px', objectFit: 'cover', flex: '1 1 auto' }}
+                                    style={{ maxHeight: '300px', objectFit: 'cover', flex: '1 1 auto', cursor: 'pointer' }}
+                                    onClick={() => setSelectedImage(imageUrl)}
                                 />
                             );
                         })}
@@ -127,6 +129,22 @@ export default function PostCard({ post }: PostCardProps) {
                     </Link>
                 </div>
             </Card.Body>
+
+            <Modal show={Boolean(selectedImage)} onHide={() => setSelectedImage(null)} centered size="lg">
+                <Modal.Header closeButton>
+                    <Modal.Title>Imagen del post</Modal.Title>
+                </Modal.Header>
+                <Modal.Body className="text-center bg-dark">
+                    {selectedImage && (
+                        <img
+                            src={selectedImage}
+                            alt="Imagen del post ampliada"
+                            className="img-fluid rounded"
+                            style={{ maxHeight: '75vh', objectFit: 'contain' }}
+                        />
+                    )}
+                </Modal.Body>
+            </Modal>
         </Card>
     );
 }
