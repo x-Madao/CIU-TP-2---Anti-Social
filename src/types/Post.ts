@@ -9,7 +9,11 @@ export type Post = {
     nombre:string;
   };
   tags: Tag[];
-  images?: string[]
+  images?: { _id?:string; url:string}[];
+  reactions?: {
+    user: string;
+    reactionType: string;
+  }[];
   commentsCount?: number;
   createdAt?: string;
 };

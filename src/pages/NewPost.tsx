@@ -1,26 +1,25 @@
-import React, { useState, useEffect, useContext, } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { Container, Form, Button, Card, Alert, Spinner, Row, Col } from "react-bootstrap";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../context/AuthContext";
 import { getTags } from "../services/tagService";
-import { createPost, createPostImage } from "../services/postService";
+import { createPost } from "../services/postService"; 
 import type { Tag } from "../types/tag";
 
 export function NewPost() {
   const auth = useContext(AuthContext);
   const navigate = useNavigate();
 
-
   const [description, setDescription] = useState("");
   const [availableTags, setAvailableTags] = useState<Tag[]>([]);
   const [selectedTags, setSelectedTags] = useState<string[]>([]);
-  const [imageUrl, setImageUrl] = useState(""); 
+  
+  const [imageUrls, setImageUrls] = useState<string[]>([""]); 
 
   const [loadingTags, setLoadingTags] = useState(true);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
- 
   useEffect(() => {
     const fetchTags = async () => {
       try {
@@ -35,26 +34,32 @@ export function NewPost() {
     fetchTags();
   }, []);
 
-  
   const handleTagChange = (tagId: string) => {
     setSelectedTags((prev) =>
-      prev.includes(tagId)
-        ? prev.filter((id) => id !== tagId)
-        : [...prev, tagId] 
+      prev.includes(tagId) ? prev.filter((id) => id !== tagId) : [...prev, tagId]
     );
   };
 
   
+  const handleUrlChange = (index: number, value: string) => {
+    const newUrls = [...imageUrls];
+    newUrls[index] = value;
+    setImageUrls(newUrls);
+  };
+
+  const handleAddUrlField = () => {
+    setImageUrls([...imageUrls, ""]); 
+  };
+
   const handleSubmit = async (e: React.SyntheticEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log("CONTENIDO DE AUTH.USER:", auth?.user);
+    
     const userIdToSubmit = auth?.user?._id || (auth?.user as any)?.id;
     
     if (!userIdToSubmit) {
       setError("Error crítico: No se pudo obtener tu ID. Por favor, cerrá sesión y volvé a entrar.");
       return;
     }
-
     if (!description.trim()) {
       setError("La descripción no puede estar vacía.");
       return;
@@ -65,18 +70,17 @@ export function NewPost() {
 
     try {
       
-      const newPost = await createPost({
+      const validImages = imageUrls
+        .filter(url => url.trim() !== "")
+        .map(url => ({ url: url.trim() }));
+
+      await createPost({
         description,
         userId: userIdToSubmit,
         tags: selectedTags,
+        images: validImages, 
       });
 
-     
-      if (imageUrl.trim() && newPost._id) {
-        await createPostImage(newPost._id, imageUrl.trim());
-      }
-
-     
       navigate("/");
     } catch (err: any) {
       setError(err.message || "Ocurrió un error al crear la publicación.");
@@ -86,7 +90,7 @@ export function NewPost() {
   };
 
   return (
-    <Container className="mt-5">
+    <Container className="mt-5 mb-5">
       <Row className="justify-content-center">
         <Col md={8} lg={6}>
           <Card className="shadow-sm">
@@ -108,32 +112,38 @@ export function NewPost() {
                   />
                 </Form.Group>
 
-                <Form.Group className="mb-3" controlId="postImage">
-                  <Form.Label>URL de Imagen (Opcional)</Form.Label>
-                  <Form.Control
-                    type="url"
-                    placeholder="https://ejemplo.com/imagen.jpg"
-                    value={imageUrl}
-                    onChange={(e) => setImageUrl(e.target.value)}
-                    disabled={isSubmitting}
-                  />
-                  
-                  {imageUrl && (
-                    <div className="mt-2 text-center">
-                      <img 
-                        src={imageUrl} 
-                        alt="Vista previa" 
-                        style={{ maxHeight: '150px', objectFit: 'cover', borderRadius: '8px' }} 
-                        onError={(e) => (e.currentTarget.style.display = 'none')}
+                <Form.Group className="mb-4">
+                  <Form.Label className="fw-bold">Imágenes (Opcional)</Form.Label>
+                  {imageUrls.map((url, index) => (
+                    <div key={index} className="mb-2">
+                      <Form.Control
+                        type="url"
+                        placeholder="https://ejemplo.com/imagen.jpg"
+                        value={url}
+                        onChange={(e) => handleUrlChange(index, e.target.value)}
+                        disabled={isSubmitting}
                       />
+                      {url && (
+                        <div className="mt-2 text-center">
+                          <img 
+                            src={url} 
+                            alt={`Vista previa ${index + 1}`} 
+                            style={{ maxHeight: '100px', objectFit: 'cover', borderRadius: '8px' }} 
+                            onError={(e) => (e.currentTarget.style.display = 'none')}
+                          />
+                        </div>
+                      )}
                     </div>
-                  )}
+                  ))}
+                  <Button variant="outline-secondary" size="sm" onClick={handleAddUrlField} disabled={isSubmitting}>
+                    + Agregar otra imagen
+                  </Button>
                 </Form.Group>
 
                 <Form.Group className="mb-4">
-                  <Form.Label>Etiquetas (Seleccioná las que apliquen)</Form.Label>
+                  <Form.Label className="fw-bold">Etiquetas</Form.Label>
                   {loadingTags ? (
-                    <div><Spinner animation="border" size="sm" /> Cargando etiquetas...</div>
+                    <div><Spinner animation="border" size="sm" /> Cargando...</div>
                   ) : availableTags.length === 0 ? (
                     <p className="text-muted small">No hay etiquetas disponibles.</p>
                   ) : (
@@ -155,14 +165,7 @@ export function NewPost() {
 
                 <div className="d-grid">
                   <Button variant="primary" type="submit" disabled={isSubmitting || !description.trim()}>
-                    {isSubmitting ? (
-                      <>
-                        <Spinner as="span" animation="border" size="sm" role="status" aria-hidden="true" />
-                        {' '}Publicando...
-                      </>
-                    ) : (
-                      "Publicar"
-                    )}
+                    {isSubmitting ? "Publicando..." : "Publicar"}
                   </Button>
                 </div>
               </Form>

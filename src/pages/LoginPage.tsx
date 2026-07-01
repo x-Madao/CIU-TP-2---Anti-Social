@@ -53,7 +53,7 @@ export function LoginPage() {
         }
         auth?.login(user);
         localStorage.setItem("user", JSON.stringify(user));
-        navigate("/");
+        navigate("/feed");
 
         console.log(user);
 

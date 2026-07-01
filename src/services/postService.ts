@@ -16,6 +16,7 @@ export type CreatePostDto = {
     description: string;
     userId: string;
     tags: string[];
+    images?: {url:string}[];
 };
 
 export async function createPost(postData: CreatePostDto) : Promise<Post> {
@@ -34,16 +35,22 @@ export async function createPost(postData: CreatePostDto) : Promise<Post> {
     return response.json();
 }
 
-export async function createPostImage(postId: string, url: string): Promise<void> {
-  const response = await fetch(`${API_URL}/postimages`, {
-    method: "POST",
+
+export const reactToPost = async (postId: string, userId: string, reactionType: string) => {
+  
+  const response = await fetch(`http://localhost:3000/api/posts/${postId}/react`, {
+    method: 'POST',
     headers: {
-      "Content-Type": "application/json",
+      'Content-Type': 'application/json',
+      
     },
-    body: JSON.stringify({ postId, url }),
+    body: JSON.stringify({ userId, reactionType })
   });
 
   if (!response.ok) {
-    throw new Error("Error al guardar la imagen asociada");
+    const errorData = await response.json();
+    throw new Error(errorData.message || 'Error al reaccionar al post');
   }
-}
+
+  return response.json();
+};
