@@ -36,15 +36,15 @@ export function NavbarApp() {
           <Nav>
            
             {auth?.user && (
-              <>
+              <div className="d-flex flex-column flex-lg-row gap-2">
                 <LinkContainer to="/profile">
-                  <Button variant="light" className="me-2">Mi Perfil</Button>
+                  <Button variant="light" >Mi Perfil</Button>
                 </LinkContainer>
 
                 <Button variant="outline-danger" onClick={handleLogout}>
                   Cerrar sesión
                 </Button>
-              </>
+              </div>
             )}
           </Nav>
 
